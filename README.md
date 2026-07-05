@@ -54,6 +54,112 @@ When everything is consistent:
 [OK] Language files are consistent across all locales.
 ```
 
+## Examples
+
+### Missing translation key
+
+`lang/en/messages.php`
+
+```php
+return [
+    'welcome' => 'Welcome',
+    'goodbye' => 'Goodbye', // present in EN
+];
+```
+
+`lang/lt/messages.php`
+
+```php
+return [
+    'welcome' => 'Sveiki',
+    // 'goodbye' is missing
+];
+```
+
+```
+[ERROR] LT locale missing goodbye translation in messages.php
+```
+
+---
+
+### Missing file
+
+`lang/en/auth.php` — exists  
+`lang/lt/auth.php` — missing
+
+```
+[ERROR] Missing file for locale LT: auth.php
+```
+
+---
+
+### Type mismatch
+
+`lang/en/messages.php`
+
+```php
+return [
+    'nav' => [
+        'home'  => 'Home',
+        'about' => 'About',
+    ],
+];
+```
+
+`lang/lt/messages.php`
+
+```php
+return [
+    'nav' => 'Navigacija', // scalar instead of array
+];
+```
+
+```
+[ERROR] Type mismatch for key nav in messages.php (EN=array, LT=value)
+```
+
+---
+
+### Empty translation
+
+`lang/en/messages.php`
+
+```php
+return [
+    'welcome' => '', // empty string
+];
+```
+
+```
+[WARNING] Empty translation in messages.php (EN): welcome
+```
+
+---
+
+### All correct
+
+`lang/en/messages.php`
+
+```php
+return [
+    'welcome' => 'Welcome',
+    'goodbye' => 'Goodbye',
+];
+```
+
+`lang/lt/messages.php`
+
+```php
+return [
+    'welcome' => 'Sveiki',
+    'goodbye' => 'Viso gero',
+];
+```
+
+```
+[OK] Language files are consistent across all locales.
+```
+
 ## Testing
 
 ```bash
