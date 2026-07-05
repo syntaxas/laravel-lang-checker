@@ -9,16 +9,19 @@ on:
 
 jobs:
   phpstan:
-    name: phpstan
+    name: phpstan (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    strategy:
+      matrix:
+        php: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: ${{ matrix.php }}
           coverage: none
 
       - name: Install composer dependencies
