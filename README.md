@@ -1,68 +1,57 @@
-# :package_description
+# Laravel Lang Checker
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://github.com/spatie/package-skeleton-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://github.com/spatie/package-skeleton-laravel/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/syntaxas/laravel-lang-checker.svg?style=flat-square)](https://packagist.org/packages/syntaxas/laravel-lang-checker)
+[![GitHub Tests Action Status](https://github.com/syntaxas/laravel-lang-checker/actions/workflows/run-tests.yml/badge.svg)](https://github.com/syntaxas/laravel-lang-checker/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://github.com/syntaxas/laravel-lang-checker/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/syntaxas/laravel-lang-checker/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/syntaxas/laravel-lang-checker.svg?style=flat-square)](https://packagist.org/packages/syntaxas/laravel-lang-checker)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Laravel Lang Checker is a package for checking language files and translations in Laravel applications. It helps ensure that your translations are complete and consistent across different languages.
 
-## Support us
+## Requirements
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- PHP **8.2**, **8.3**, **8.4**, or **8.5**
+- Laravel **11**, **12**, or **13**
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+composer require syntaxas/laravel-lang-checker
 ```
 
 ## Usage
 
-```php
-$:variable = new VendorName\Skeleton();
-echo $:variable->echoPhrase('Hello, VendorName!');
+```bash
+php artisan laravel-language:check
+```
+
+## What It Checks
+
+The command scans all locale directories under your `lang/` path and runs the following checks:
+
+| Check                                                         | Outcome            |
+| ------------------------------------------------------------- | ------------------ |
+| `lang/` directory does not exist                              | ❌ Fails           |
+| No locale subdirectories found                                | ⚠️ Warning, passes |
+| A translation file exists in some locales but not all         | ❌ Fails           |
+| A translation key exists in some locales but not all          | ❌ Fails           |
+| A key is an array in one locale but a scalar value in another | ❌ Fails           |
+| A translation file does not return an array                   | ❌ Fails           |
+| A translation value is an empty string                        | ⚠️ Warning, passes |
+
+Checks work recursively — files in subdirectories (e.g. `/lang/lt/admin/dashboard.php`) are included.
+
+When the command fails, it reports the total number of issues found:
+
+```
+[ERROR] Language files check failed with 3 issue(s).
+```
+
+When everything is consistent:
+
+```
+[OK] Language files are consistent across all locales.
 ```
 
 ## Testing
@@ -70,23 +59,6 @@ echo $:variable->echoPhrase('Hello, VendorName!');
 ```bash
 composer test
 ```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
 
 ## License
 
