@@ -25,20 +25,34 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
+
     strategy:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.5, 8.4, 8.3, 8.2]
-        laravel: [13.*, 12.*, "11.*"]
+        laravel: [11.*, 12.*, 13.*]
+        php: [8.2, 8.3, 8.4, 8.5]
         stability: [prefer-lowest, prefer-stable]
-        include:
+
+        exclude:
+          # Laravel 11 supports up to PHP 8.4
+          - laravel: 11.*
+            php: 8.5
+
+          # Laravel 13 requires PHP 8.3+
           - laravel: 13.*
-            testbench: 11.*
-          - laravel: 12.*
-            testbench: 10.*
+            php: 8.2
+
+        include:
+          # Testbench mapping
           - laravel: 11.*
             testbench: 9.*
+
+          - laravel: 12.*
+            testbench: 10.*
+
+          - laravel: 13.*
+            testbench: 11.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
